@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+{% load custom_filters %}
+{% block content %}
+
+    <style>
+        .carousel-3d {
+            transform-style: preserve-3d;
+            transition: transform 1s ease-in-out;
+        }
+
+
+        .carousel-item {
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+
+        .carousel-item img {
+            transition: transform 0.5s;
+           
+            transform-style: preserve-3d;
+        }
+        .carousel-item:hover img{
+        transform: scale(1.7);
+        transition: transform 0.4s ease;
+        z-index: 10;
+        }
+
+        .carousel-item.active img {
+            transform: scale(1.3);
+            z-index: 30;
+        }
+
+        .perspective-container {
+            perspective: 1200px;
+        } 
+        .carousel-item p {
+        display: none;
+        }
+
+        .carousel-item.active p {
+        display: block;
+        }
+
+
+    </style>
+</head>
+<body >
+
+{% load static %}
+
+  <!-- Right: Text Box -->
+<div class="min-h-screen pt-24 px-4 flex flex-col md:flex-row items-center justify-center gap-4 bg-[#0a192f]">
+  <div class="md:w-1/2 w-full flex items-center justify-center px-8">
+  <div class="max-w-md text-center">
+
+    <div class="max-w-md text-center">
+
+      <h2 class="text-3xl md:text-4xl font-bold text-green-300 mb-4 tracking-wide">🌿 Nourish Naturally</h2>
+      <p class="text-gray-200 text-lg leading-relaxed font-medium" style="font-family: 'Inter', sans-serif;">
+        Experience the purity of nature with our handcrafted
+        organic products. Made with love and free from harmful chemicals, 
+        our shampoos nourish your hair with the goodness of herbs, essential oils, and nature’s finest ingredients. Because your body deserves what nature intended — gentle, clean, and real.
+      </p>
+    </div>
+  </div>
+ </div>
+  <!-- Left: Carousel -->
+  <div class="md:w-1/2 w-full px-6  flex items-center justify-center">
+
+    <div class="perspective-container overflow-hidden w-full h-full flex items-center justify-center">
+      
+    
+      <div class="carousel-3d relative w-[400px] h-[600px]" id="carousel">
+        {% with angle=360|div:total %}
+          {% for pic in pics %}
+            {% with item_angle=forloop.counter0|mul:angle %}
+              <div class="carousel-item absolute left-1/2 top-1/2 w-[180px] h-[300px] -translate-x-1/2 -translate-y-1/2 pb-12 transform transition-transform duration-700 hover:scale-105"
+                   style="transform: rotateY({{ item_angle }}deg) translateZ(300px) rotateY(-{{ item_angle }}deg);"
+                   data-index="{{ forloop.counter0 }}">
+
+                <div class="w-full h-full rounded-xl bg-white/20 backdrop-blur-md border border-white/20 overflow-hidden">
+
+                  <img src="{{ pic.image.url }}" alt="{{ pic.name }}"
+                       class="w-full h-full object-cover opacity-90 hover:opacity-100 transition duration-300" />
+                </div>
+
+                <p class="text-center text-gray-300 font-semibold mt-2 tracking-wide" style="font-family: 'Edu NSW ACT Hand Pre', cursive;">
+                  {{ pic.name }}
+                </p>
+
+              </div>
+            {% endwith %}
+          {% endfor %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+<script>
+const carousel = document.getElementById('carousel');
+const items = document.querySelectorAll('.carousel-item');
+const total = items.length;
+const radius = 300;
+const anglePerItem = 360 / total;
+
+let currentAngle = 0;
+let currentIndex = 0;
+let rotationSpeed = 0.02; // fine-tuned for smooth auto-rotation
+let paused = false;
+let pauseTimeout = null;
+
+// Position items
+function updateCarousel() {
+  items.forEach((item, i) => {
+    const angle = i * anglePerItem + currentAngle;
+    item.style.transform = `
+      rotateY(${angle}deg)
+      translateZ(${radius}px)
+      rotateY(${-angle}deg)
+    `;
+  });
+
+  // Update active text
+  const activeIndex = Math.round((360 - currentAngle % 360) / anglePerItem) % total;
+  items.forEach(item => item.classList.remove('active'));
+  items[activeIndex].classList.add('active');
+}
+
+// Animate continuously
+let lastTime = 0;
+function animate(time) {
+  const delta = time - lastTime;
+  lastTime = time;
+
+  if (!paused) {
+    currentAngle += rotationSpeed * delta;
+  }
+
+  updateCarousel();
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+// Desktop pause on hover
+items.forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    paused = true;
+  });
+  item.addEventListener('mouseleave', () => {
+    paused = false;
+  });
+});
+
+// Resume rotation after interaction
+function pauseAndResume(delay = 2000) {
+  paused = true;
+  clearTimeout(pauseTimeout);
+  pauseTimeout = setTimeout(() => {
+    paused = false;
+  }, delay);
+}
+
+// Rotate based on side tapped
+function handleInteraction(event) {
+  const x = event.clientX || event.touches?.[0].clientX;
+  const screenWidth = window.innerWidth;
+
+  if (x < screenWidth / 2) {
+    currentIndex = (currentIndex - 1 + total) % total;
+  } else {
+    currentIndex = (currentIndex + 1) % total;
+  }
+
+  currentAngle = -currentIndex * anglePerItem;
+  updateCarousel();
+  pauseAndResume();
+}
+
+// Add interaction for desktop & mobile
+items.forEach(item => {
+  item.addEventListener('click', handleInteraction);
+  item.addEventListener('touchstart', handleInteraction);
+});
+items.forEach(item => {
+  item.addEventListener('click', handleTap);
+  item.addEventListener('touchstart', handleTap);
+});
+
+function handleTap(event) {
+  const x = event.clientX || event.touches?.[0].clientX;
+  const screenWidth = window.innerWidth;
+
+  // Left half → backward
+  if (x < screenWidth / 2) {
+    currentRotation += anglePerItem;
+  } else {
+    // Right half → forward
+    currentRotation -= anglePerItem;
+  }
+
+  // Update visuals
+  items.forEach((item, i) => {
+    const angle = i * anglePerItem + currentRotation;
+    item.style.transform = `
+      rotateY(${angle}deg)
+      translateZ(${radius}px)
+      rotateY(${-angle}deg)
+    `;
+  });
+
+  // Mark front item active
+  let frontIndex = Math.round((360 - currentRotation % 360) / anglePerItem) % total;
+  items.forEach(item => item.classList.remove('active'));
+  items[frontIndex].classList.add('active');
+
+  // Restart auto-rotation after 2 seconds
+  stopAutoRotate();
+  setTimeout(() => startAutoRotate(), 2000);
+}
+// Initialize
+updateCarousel();
+// Add tap support (mobile or desktop click)
+
+
+</script>
+
+</body>
+
+{% endblock %}
