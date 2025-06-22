@@ -40,9 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home' ,
+    'shop',
     'tailwind',
     'theme',
     "django_browser_reload",
+    'django_extensions',
  ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -137,3 +139,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Keeps session cookie alive for 2 weeks
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
+
+# Optional: session persists even after browser closes
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
