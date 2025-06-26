@@ -4,15 +4,15 @@
 {% block content %}
 
 <body class="bg-[#0a192f] text-white font-sans">
-  <div class="min-h-screen pt-24 px-4">
+  <div class="min-h-screen pt-24 px-4 pb-16">
 
     <!-- Flex container for cards -->
-    <div class="flex flex-wrap justify-center gap-6">
+    <div class="flex flex-wrap justify-center gap-6 gap-y-8">
 
       {% for product in products %}
       
-        <div class="bg-[#112240] h-[400px] rounded-xl border border-white/10 shadow-md hover:shadow-xl transition duration-300 overflow-hidden
-                    w-[180px] sm:w-[48%] md:w-[31%] lg:w-[23%] flex flex-col">
+        <div class="dark:bg-[#112240] bg-white h-[400px] rounded-xl border border-white/10 shadow-md hover:shadow-xl transition duration-300 overflow-hidden
+                    w-full sm:w-[48%] md:w-[31%] lg:w-[23%] max-w-[300px] flex flex-col">
 
           <!-- Product Image -->
           <div class="w-full aspect-square bg-white flex items-center justify-center overflow-hidden">

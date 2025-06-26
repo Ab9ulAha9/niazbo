@@ -1,0 +1,57 @@
+{% extends "layout.html" %} 
+
+{% block content %}
+<body class="bg-gray-100 text-gray-800 font-sans mt-20">
+
+  <div class="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl text-gray-600 mt-20">
+    <h1 class="text-2xl font-bold mb-4">Track Your Order</h1>
+
+    <div class="mb-6">
+      <p><strong>Order ID:</strong> {{ order.id }}</p>
+      <p><strong>Tracking Token:</strong> {{ order.tracking_token }}</p>
+      <p><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y" }}</p>
+      <p><strong>Status:</strong> <span class="font-semibold text-red-600">{{ order.status }}</span></p>
+      <p><strong>Estimated Delivery:</strong> {{ order.estimated_delivery|date:"F j, Y" }}</p>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-2">Order Progress</h2>
+
+    <div class="flex items-center justify-between text-sm text-gray-600">
+      <div class="flex-1 text-center">
+        <div class="w-8 h-8 mx-auto mb-1 rounded-full bg-green-500 text-white flex items-center justify-center">
+          ✓
+        </div>
+        Order Placed
+      </div>
+
+      <div class="w-1/4 h-1 bg-green-500"></div>
+
+      <div class="flex-1 text-center">
+        <div class="w-8 h-8 mx-auto mb-1 rounded-full {{ order.status |yesno:'bg-green-500 text-white,bg-gray-300 text-gray-600' }} flex items-center justify-center">
+          ✓
+        </div>
+        Shipped
+      </div>
+
+      <div class="w-1/4 h-1 {{ order.status |yesno:'bg-green-500,bg-gray-300' }}"></div>
+
+      <div class="flex-1 text-center">
+        <div class="w-8 h-8 mx-auto mb-1 rounded-full {{ order.status |yesno:'bg-green-500 text-white,bg-gray-300 text-gray-600' }} flex items-center justify-center">
+          ✓
+        </div>
+        Out for Delivery
+      </div>
+
+      <div class="w-1/4 h-1 {{ order.status |yesno:'bg-green-500,bg-gray-300' }}"></div>
+
+      <div class="flex-1 text-center">
+        <div class="w-8 h-8 mx-auto mb-1 rounded-full {{ order.status |yesno:'bg-green-500 text-white,bg-gray-300 text-gray-600' }} flex items-center justify-center">
+          ✓
+        </div>
+        Delivered
+      </div>
+    </div>
+  </div>
+
+</body>
+{% endblock  %}

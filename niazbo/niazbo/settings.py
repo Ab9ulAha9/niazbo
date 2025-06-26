@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home' ,
     'shop',
+    'orders',
     'tailwind',
     'theme',
     "django_browser_reload",
     'django_extensions',
+    "phonenumber_field",
  ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -145,3 +147,12 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
 # Optional: session persists even after browser closes
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+ 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'niazbostore@gmail.com'         # ✅ this is the authenticated Gmail address
+EMAIL_HOST_PASSWORD = 'egdb enwg tpkl hekc'         # ⚠️ NOT your Gmail password!
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

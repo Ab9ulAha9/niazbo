@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-100 py-10 px-4 mt-10">
+  <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-8">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">🛒 Checkout Summary</h1>
+
+    <!-- Order Details -->
+    <div class="space-y-4 text-gray-700 ">
+      <p><span class="font-medium">Name:</span> {{ order.name }}</p>
+      <p><span class="font-medium">Email:</span> {{ order.email }}</p>
+      <p><span class="font-medium">Phone:</span> {{ order.phone_number }}</p>
+      <p><span class="font-medium">Address:</span> {{ order.address }}</p>
+      <p><span class="font-medium">Division:</span> {{ order.division }}</p>
+    </div>
+
+    <!-- Divider -->
+    <hr class="my-6 border-gray-300">
+
+    <!-- Fee Summary -->
+    <div class="text-lg">
+      <p class="mb-2 text-gray-800">🛍️ <strong>Items Total (after discount):</strong> Rs. {{ cart.after_discount|floatformat:0 }}</p>
+      <p class="mb-2 text-gray-800">🚚 <strong>Shipping Fee:</strong> Rs. {{ shipping_fee }}</p>
+      <p class="mt-4 text-xl font-bold text-gray-800">
+        💵 Total Payment: Rs. {{ cart.after_discount|add:shipping_fee }}
+      </p>
+    </div>
+
+    <!-- Confirm Form -->
+    <form method="POST" action="{% url 'checkout' %}" class="mt-8">
+      {% csrf_token %}
+      <button type="submit"
+              class="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl shadow hover:bg-blue-700 transition duration-200">
+        ✅ Confirm & Place Order
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Shipping Fee Modal -->
+<div id="shippingModal"
+     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+  <div class="bg-white rounded-2xl p-6 shadow-2xl w-96 text-center">
+    <h2 class="text-xl font-bold mb-3 text-gray-800">Shipping Fee Notice</h2>
+    <p class="text-gray-700 mb-6">
+      The shipping fee for <strong>{{ order.division }}</strong> is <strong>Rs. {{ shipping_fee }}</strong>.
+      Click OK to proceed with checkout.
+    </p>
+    <button onclick="closeModal()"
+            class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 transition">
+      OK
+    </button>
+  </div>
+</div>
+
+<script>
+  // Show modal when the page loads
+  window.onload = function () {
+    document.getElementById("shippingModal").classList.remove("hidden");
+  };
+
+  function closeModal() {
+    document.getElementById("shippingModal").classList.add("hidden");
+  }
+</script>
+{% endblock %}

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from .models import Product , Cart , CartItem , discount 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404 
+from datetime import timedelta
+from django.utils import timezone
 # Create your views here.
 
 def get_cart (request):
@@ -31,12 +33,15 @@ def update_item(request , value):
     
 
 
+
 def cart (request ):
     if request.method=="POST":
         value=request.POST.get("form")   
         update_item(request , value )   
     cart=get_cart(request)        
     return render(request , "cart.html" , {"cart":cart}) 
+
+
 
 
 def create_item (request ):
@@ -48,11 +53,12 @@ def create_item (request ):
         item.quantity +=1
         item.save()
 
-def products(request):
+
+
+def products(request): 
+    cart=get_cart(request)
     if request.method=="POST":
         create_item(request)
     products= Product.objects.all()
     return render(request, 'products.html' , {'products': products}) 
-
-
 
