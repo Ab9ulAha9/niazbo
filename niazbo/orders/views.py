@@ -39,7 +39,12 @@ def checkout(request ):
     cart=Cart.objects.get(id=cart_id)
     if request.method=="POST": 
         order=orders(**order_data)
-        order.payment=cart.after_discount + shipping_fee 
+        order.payment=cart.after_discount + shipping_fee  
+        for item in cart.items.all():
+            p=item.product
+            p.stock-=item.quantity 
+            p.save()
+            p.refresh_from_db()
         order.save()
         order.products.set([item.product for item in cart.items.all()])
         tracking_url = request.build_absolute_uri(reverse('track_order', kwargs={'token': str(order.tracking_token)})) 
@@ -59,4 +64,4 @@ def checkout(request ):
 
 def order_status(request , token):
     order=get_object_or_404(orders , tracking_token=token) 
-    return render(request , 'order_status.html' , {"order":order} )
+    return render(request , 'order_status.html' , {"order":order} ) 
