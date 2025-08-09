@@ -11,10 +11,11 @@ def get_cart (request):
     sess_key=request.session.session_key
     cart,_=Cart.objects.get_or_create(session_key=sess_key)
     d=discount.objects.first()
-    if cart.total_price>=d.min_purchase:
-        cart.discount=d.discount
-    else:
-        cart.discount=0
+    if d:
+        if cart.total_price>=d.min_purchase:
+            cart.discount=d.discount
+        else:
+            cart.discount=0
     cart.save()
     return (cart)
 
