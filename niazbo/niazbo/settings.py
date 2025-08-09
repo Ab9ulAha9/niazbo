@@ -12,7 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path 
 import os
+from dotenv import load_dotenv
 
+# Load environment variables from .env
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -151,8 +154,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = os.environ.get("EMAIL_PORT", 587)  # Default is 587 for TLS
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'niazbostore@gmail.com'         # ✅ this is the authenticated Gmail address
-EMAIL_HOST_PASSWORD = 'egdb enwg tpkl hekc'         # ⚠️ NOT your Gmail password!
+EMAIL_HOST_USER = os.environ.get("EMAIL")         # ✅ this is the authenticated Gmail address
+EMAIL_HOST_PASSWORD = os.environ.get("HOST_PASS")         # ⚠️ NOT your Gmail password!
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

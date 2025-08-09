@@ -16,15 +16,16 @@ class discount (models.Model):
     discount = models.IntegerField(default=0 , validators=[MinValueValidator(0)])
     min_purchase=models.IntegerField(default=0 ,  validators=[MinValueValidator(0)] , help_text="enter the minimum  purchase at which discount starts ")
     created_at=models.DateTimeField(auto_now=True)
+from datetime import timedelta 
+from django.utils import timezone
 
 class Cart(models.Model):
-    
+    def default_expires_at():
+        return timezone.now() + timedelta(days=30)
     session_key = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     discount = models.IntegerField(default=0 , validators=[MinValueValidator(0)]) 
-    expires_at=models.DateTimeField( auto_now=True)
-    def __str__(self):
-        return f"Cart {self.id} - Session: {self.session_key}"
+    expires_at = models.DateTimeField(default= default_expires_at)
     @property
     def total_price(self):
         return sum(item.total_price for item in self.items.all()) 
@@ -33,7 +34,8 @@ class Cart(models.Model):
         if self.discount >0:
             return self.total_price-(self.total_price/100)*self.discount
         return self.total_price
-        
+    def __str__(self):
+        return f"Cart {self.id} - Session: {self.session_key}"
 
 
 class CartItem(models.Model):
