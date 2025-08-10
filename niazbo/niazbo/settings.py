@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-cf^4df7*agl_(23(x%(v2i&v1x#*(a!1o8fda1(w!@ad!5x0$o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['niazbo.onrender.com' ] 
+ALLOWED_HOSTS = ['niazbo.onrender.com'  ] 
 
 
 
