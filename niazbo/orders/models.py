@@ -1,7 +1,8 @@
 from django.db import models
 from shop.models import Product
 from phonenumber_field.modelfields import PhoneNumberField
-import uuid
+import uuid 
+
 # Create your models here.
 PUNJAB_DIVISIONS = [
 ('Bahawalpur', 'Bahawalpur'),

@@ -1,12 +1,12 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-
+from cloudinary.models import CloudinaryField
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.IntegerField("price",  validators=[MinValueValidator(0)])
     description = models.TextField()
-    image = models.ImageField(upload_to='niazbo/')
+    image = CloudinaryField('image')
     created_at = models.DateTimeField(auto_now_add=True)
     stock=models.IntegerField("stock" , default=0, validators=[MinValueValidator(0)])
     def __str__(self):
