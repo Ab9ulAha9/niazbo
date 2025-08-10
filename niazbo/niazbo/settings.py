@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path 
 import os
 from dotenv import load_dotenv
-
+import cloudinary_storage
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-cf^4df7*agl_(23(x%(v2i&v1x#*(a!1o8fda1(w!@ad!5x0$o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['niazbo.onrender.com'  ] 
+ALLOWED_HOSTS = ['niazbo.onrender.com' , "*" ] 
 
 
 
@@ -42,8 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary',
-    'cloudinary_storage',
     'home' ,
     'shop',
     'orders',
@@ -52,6 +50,8 @@ INSTALLED_APPS = [
     "django_browser_reload",
     'django_extensions',
     "phonenumber_field",
+    'cloudinary',
+    'cloudinary_storage',
  ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -156,16 +156,20 @@ STATIC_ROOT = BASE_DIR / "staticfiles"    # used in production
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField' 
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
     'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Keeps session cookie alive for 2 weeks
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 30  # 30 days
@@ -186,3 +190,4 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 CSRF_TRUSTED_ORIGINS = ["https://niazbo.onrender.com"]
+
